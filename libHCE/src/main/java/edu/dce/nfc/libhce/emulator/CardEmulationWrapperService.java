@@ -4,6 +4,7 @@ import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import edu.dce.nfc.libhce.common.Headers;
@@ -23,8 +24,17 @@ public abstract class CardEmulationWrapperService extends HostApduService {
     @Override
     public byte[] processCommandApdu(byte[] bytes, Bundle bundle) {
         String s = Utils.ByteArrayToHexString(bytes);
+        String utf = null;
+        try {
+            utf = new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("UTF IS : " + utf);
         Log.d(TAG, "processCommandApdu : " + s);
         String commandClass = s.substring(0, Math.min(s.length(), 8));
+        String utfCmd = utf.substring(Math.min(utf.length(), 6));
+        System.out.println(utfCmd);
         Log.d(TAG, "commandClass = " + commandClass);
 
         if (commandClass.equalsIgnoreCase(Headers.HEADER_SELECT)) {
@@ -39,12 +49,14 @@ public abstract class CardEmulationWrapperService extends HostApduService {
 
             }
 
-            if (s.contains("END_OF_COMMAND")) {
+            if (utf.contains("END_OF_COMMAND")) {
                 Log.d(TAG, "received END_OF_COMMAND");
                 results = Utils.StringSplit255(onReceiveCommand(command));
+                command = "";
                 return Utils.ConcatArrays("RESPONSE_SENDCOMMAND_PROCESSED".getBytes(), Headers.RESPONSE_SENDCOMMAND_PROCESSED);
             }
-            command += s.substring(11);
+            command += utfCmd;
+            System.out.println("COMMAND IS: " + command);
 
             return Utils.ConcatArrays("RESPONSE_SENDCOMMAND_OK".getBytes(), Headers.RESPONSE_SENDCOMMAND_OK);
         }
@@ -71,7 +83,14 @@ public abstract class CardEmulationWrapperService extends HostApduService {
     }
 
     public String sendResultPart (String[] results) {
-        if (sendCounter < results.length) {
+        int targetLength = 0;
+        if (results != null) {
+            targetLength = results.length;
+        }
+        else {
+            System.out.println("in here");
+        }
+        if (sendCounter < targetLength) {
             sendCounter += 1;
             return results[sendCounter-1];
         } else {

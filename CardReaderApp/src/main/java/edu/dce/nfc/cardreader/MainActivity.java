@@ -39,10 +39,16 @@ public class MainActivity extends ReaderActivity {
         // TODO:
         // Start sending the commands here
         // Using transactNFC(command); calls
+        try {
+            String result = transactNfc(isoDep, "mindboggle");
+            System.out.println("MINDBOOGGLE RESP IS: " + result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
-            String result = transactNfc(isoDep, "hello");
-            Log.d(TAG, "result = " + result);
+            String result = transactNfc(isoDep, "hellogg");
+            System.out.println("HELOGG result = " + result);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,6 +60,7 @@ public class MainActivity extends ReaderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        System.out.println("in create activity");
     }
 
     @Override

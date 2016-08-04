@@ -15,8 +15,11 @@ as the reader can intiate the connection.
 
 
 ###libHCE    
+Library
 
 ###CardEmulatorApp    
+User app (client)
 
-###CardReaderApp    
+###CardReaderApp 
+Receiver App (Hotel Tag)   
 

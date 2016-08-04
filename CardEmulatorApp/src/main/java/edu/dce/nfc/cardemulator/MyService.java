@@ -15,12 +15,13 @@ public class MyService extends EmulatorService {
     @Override
     public String onReceiveCommand(String command) {
         Log.i(TAG, "onReceiveCommand called with command = " + command);
-        String actualCommand = new String(Utils.HexStringToByteArray(command));
+        String actualCommand = command;
         Log.i(TAG, "actual command = " + actualCommand);
         if (actualCommand.contains("somecommand")) {
             return "someresult";
         }
         if (actualCommand.contains("hello")) {
+            System.out.println("this is sooo ambiguous");
             return "hi there nice to met you";
         }
         if (actualCommand.contains("lo")) {
