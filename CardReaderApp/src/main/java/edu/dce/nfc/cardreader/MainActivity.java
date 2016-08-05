@@ -40,19 +40,19 @@ public class MainActivity extends ReaderActivity {
         // Start sending the commands here
         // Using transactNFC(command); calls
         try {
-            String result = transactNfc(isoDep, "mindboggle");
-            System.out.println("MINDBOOGGLE RESP IS: " + result);
+            String result = transactNfc(isoDep, "OPENDOOR");
+            System.out.println("result is: " + result);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        try {
+/*        try {
             String result = transactNfc(isoDep, "hellogg");
             System.out.println("HELOGG result = " + result);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+*/
 
     }
 

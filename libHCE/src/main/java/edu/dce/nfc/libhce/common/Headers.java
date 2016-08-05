@@ -57,6 +57,7 @@ public class Headers {
      */
     public static final byte[] RESPONSE_SENDCOMMAND_PROCESSED = {(byte) 0x90, (byte) 0x11};
 
+
     /**
      * Build APDU for SELECT AID command. This command indicates which service a reader is
      * interested in communicating with. See ISO 7816-4.

@@ -30,12 +30,11 @@ public abstract class CardEmulationWrapperService extends HostApduService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println("UTF IS : " + utf);
-        Log.d(TAG, "processCommandApdu : " + s);
+//        Log.d(TAG, "processCommandApdu : " + s);
         String commandClass = s.substring(0, Math.min(s.length(), 8));
         String utfCmd = utf.substring(Math.min(utf.length(), 6));
-        System.out.println(utfCmd);
-        Log.d(TAG, "commandClass = " + commandClass);
+//        System.out.println(utfCmd);
+//        Log.d(TAG, "commandClass = " + commandClass);
 
         if (commandClass.equalsIgnoreCase(Headers.HEADER_SELECT)) {
             // This is select command
@@ -56,7 +55,6 @@ public abstract class CardEmulationWrapperService extends HostApduService {
                 return Utils.ConcatArrays("RESPONSE_SENDCOMMAND_PROCESSED".getBytes(), Headers.RESPONSE_SENDCOMMAND_PROCESSED);
             }
             command += utfCmd;
-            System.out.println("COMMAND IS: " + command);
 
             return Utils.ConcatArrays("RESPONSE_SENDCOMMAND_OK".getBytes(), Headers.RESPONSE_SENDCOMMAND_OK);
         }
@@ -86,9 +84,6 @@ public abstract class CardEmulationWrapperService extends HostApduService {
         int targetLength = 0;
         if (results != null) {
             targetLength = results.length;
-        }
-        else {
-            System.out.println("in here");
         }
         if (sendCounter < targetLength) {
             sendCounter += 1;
