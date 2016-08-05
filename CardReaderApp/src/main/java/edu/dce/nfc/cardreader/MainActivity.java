@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.io.IOException;
 
 import edu.dce.nfc.libhce.ReaderActivity;
+import edu.dce.nfc.libhce.common.ErrorStrings;
 import edu.dce.nfc.libhce.reader.CardReader;
 
 
@@ -42,6 +44,9 @@ public class MainActivity extends ReaderActivity {
         try {
             String result = transactNfc(isoDep, "OPENDOOR");
             System.out.println("result is: " + result);
+            if (result.contains("ERROR")) {
+                handleError(result);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,5 +98,11 @@ public class MainActivity extends ReaderActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void handleError(String error) {
+        if (error.equals(ErrorStrings.ERROR_NO_ROOM)) {
+            Toast.makeText(this, "You haven't checked in yet!", Toast.LENGTH_LONG).show();
+        }
     }
 }
