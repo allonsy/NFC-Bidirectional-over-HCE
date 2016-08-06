@@ -1,14 +1,19 @@
 package edu.dce.nfc.cardemulator;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
+    String mStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +42,9 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void displayToast() {
+        Toast.makeText(this, "HI", Toast.LENGTH_LONG);
     }
 }

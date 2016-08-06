@@ -1,5 +1,7 @@
 package edu.dce.nfc.cardemulator;
 
+import android.content.SharedPreferences;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +24,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 
+import edu.dce.nfc.libhce.common.ErrorStrings;
+
 /**
  * Created by alec on 7/26/16.
  */
@@ -31,7 +35,7 @@ public class SecureConnect extends Thread {
     private InputStream keyStream;
     private SSLSocket socket;
 
-    private Boolean mSuccess;
+    private String mSuccess;
     private String mCommandType;
 
     public SecureConnect(String addr, int p, InputStream ks, String commandType) {
@@ -73,11 +77,11 @@ public class SecureConnect extends Thread {
             context.init(keys, trustChain, null);
         } catch (KeyManagementException e) {
             System.out.println("key management error: " + e);
-            mSuccess = false;
+            mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
             return;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            mSuccess = false;
+            mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
             return;
         } catch (UnrecoverableKeyException e) {
             e.printStackTrace();
@@ -96,26 +100,20 @@ public class SecureConnect extends Thread {
                 int writeLen = readSocket(received);
                 if (writeLen != -1) {
                     String receivedString = new String(received, 0, writeLen, "UTF-8");
-                    System.out.println("parsing json from " + receivedString);
-                    JSONObject receivedJSON = new JSONObject(receivedString);
-                    mSuccess = parseJSON(receivedJSON);
+                    mSuccess = receivedString;
                 } else {
                     System.out.println("failed to read..");
-                    mSuccess = false;
+                    mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
                 }
             }
             else {
-                mSuccess = false;
+                mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
                 System.out.println("cannot connect to server");
             }
         } catch (IOException e) {
-            mSuccess = false;
+            mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
             e.printStackTrace();
             System.out.println("encountered error: " + e);
-        } catch (JSONException e) {
-            mSuccess = false;
-            e.printStackTrace();
-            System.out.println("could not parse json");
         }
         finally {
             closeSocket();
@@ -143,21 +141,9 @@ public class SecureConnect extends Thread {
         }
     }
 
-    public boolean isSuccess() {
+    public String isSuccess() {
         return mSuccess;
     }
 
-    private boolean parseJSON(JSONObject obj) {
-        try {
-            if (obj.getBoolean("success") == true) {
-                return true;
-            } else {
-                System.out.println(obj.get("error"));
-                return false;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+
 }

@@ -38,11 +38,9 @@ public class MainActivity extends ReaderActivity {
                 "  Max Transceive Length = " + mMaxTransceiveLength +
                 "  Timeout = " + mTimeout);
 
-        // TODO:
-        // Start sending the commands here
-        // Using transactNFC(command); calls
         try {
-            String result = transactNfc(isoDep, "OPENDOOR");
+//            String result = transactNfc(isoDep, "OPENDOOR");
+            String result = transactNfc(isoDep, "CHECKIN");
             System.out.println("result is: " + result);
             if (result.contains("ERROR")) {
                 handleError(result);
