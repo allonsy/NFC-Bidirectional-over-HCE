@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
-    String mStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void displayToast() {
-        Toast.makeText(this, "HI", Toast.LENGTH_LONG);
-    }
 }

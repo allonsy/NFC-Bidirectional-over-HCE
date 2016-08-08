@@ -1,12 +1,5 @@
 package edu.dce.nfc.cardemulator;
 
-import android.content.SharedPreferences;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -24,7 +17,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 
-import edu.dce.nfc.libhce.common.ErrorStrings;
+import edu.dce.nfc.libhce.common.ReturnStrings;
 
 /**
  * Created by alec on 7/26/16.
@@ -77,11 +70,11 @@ public class SecureConnect extends Thread {
             context.init(keys, trustChain, null);
         } catch (KeyManagementException e) {
             System.out.println("key management error: " + e);
-            mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
+            mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
             return;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
+            mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
             return;
         } catch (UnrecoverableKeyException e) {
             e.printStackTrace();
@@ -103,15 +96,15 @@ public class SecureConnect extends Thread {
                     mSuccess = receivedString;
                 } else {
                     System.out.println("failed to read..");
-                    mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
+                    mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
                 }
             }
             else {
-                mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
+                mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
                 System.out.println("cannot connect to server");
             }
         } catch (IOException e) {
-            mSuccess = ErrorStrings.ERROR_SECURE_CONNECT;
+            mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
             e.printStackTrace();
             System.out.println("encountered error: " + e);
         }

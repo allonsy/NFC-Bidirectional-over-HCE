@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CardReader</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Dentify_Receiver</string>
+    <string name="title_string">Receiver Emulator</string>
     <string name="action_settings">Settings</string>
 
 </resources>

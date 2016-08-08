@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class Utils {
 
+    public static final String SERVER_IP_ADDRESS = "192.168.1.46";
+    public static final int SERVER_PORT = 3000;
+
     /**
      * Utility method to convert a byte array to a hexadecimal string.
      *

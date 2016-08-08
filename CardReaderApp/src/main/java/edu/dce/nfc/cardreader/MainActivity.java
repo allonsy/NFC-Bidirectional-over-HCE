@@ -3,15 +3,13 @@ package edu.dce.nfc.cardreader;
 import android.nfc.tech.IsoDep;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.Menu;
 
 import java.io.IOException;
 
 import edu.dce.nfc.libhce.ReaderActivity;
-import edu.dce.nfc.libhce.common.ErrorStrings;
-import edu.dce.nfc.libhce.reader.CardReader;
+import edu.dce.nfc.libhce.common.ReturnStrings;
 
 
 public class MainActivity extends ReaderActivity {
@@ -39,23 +37,42 @@ public class MainActivity extends ReaderActivity {
                 "  Timeout = " + mTimeout);
 
         try {
-//            String result = transactNfc(isoDep, "OPENDOOR");
-            String result = transactNfc(isoDep, "CHECKIN");
-            System.out.println("result is: " + result);
-            if (result.contains("ERROR")) {
+/*            String result = transactNfc(isoDep, "CHECKIN");
+            if (result.equals(ReturnStrings.SUCCESS_CHECK_IN)) {
+                //TODO: display green
+                System.out.println("Successful checkin");
+            } else {
                 handleError(result);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-/*        try {
-            String result = transactNfc(isoDep, "hellogg");
-            System.out.println("HELOGG result = " + result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 */
+/*            String result = transactNfc(isoDep, "OPENDOOR");
+            if (result.equals(ReturnStrings.SUCCESS_OPEN_ROOM)) {
+                //TODO: display green
+                System.out.println("Successful open door");
+            } else {
+                handleError(result);
+            }
+*/
+/*            String result = transactNfc(isoDep, "ROOMCHARGE");
+            if (result.equals(ReturnStrings.SUCCESS_ROOM_CHARGE)) {
+                //TODO: display green
+                System.out.println("Successful room charge");
+            } else {
+                handleError(result);
+            }
+*/
+            String result = transactNfc(isoDep, "CHECKOUT");
+            if (result.equals(ReturnStrings.SUCCESS_CHECKOUT)) {
+                //TODO: display green
+                System.out.println("Successful check out");
+            } else {
+                handleError(result);
+            }
+            System.out.println("result is: " + result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -63,7 +80,6 @@ public class MainActivity extends ReaderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("in create activity");
     }
 
     @Override
@@ -99,8 +115,7 @@ public class MainActivity extends ReaderActivity {
     }
 
     private void handleError(String error) {
-        if (error.equals(ErrorStrings.ERROR_NO_ROOM)) {
-            Toast.makeText(this, "You haven't checked in yet!", Toast.LENGTH_LONG).show();
-        }
+        //TODO: turn screen red
+        System.out.println("ERROR: " + error);
     }
 }
