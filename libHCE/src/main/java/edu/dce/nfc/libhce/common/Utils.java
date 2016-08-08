@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Utils {
 
-    public static final String SERVER_IP_ADDRESS = "192.168.1.46";
+    public static final String SERVER_IP_ADDRESS = "10.10.43.217";
     public static final int SERVER_PORT = 3000;
 
     /**

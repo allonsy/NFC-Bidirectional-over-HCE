@@ -78,8 +78,12 @@ public class SecureConnect extends Thread {
             return;
         } catch (UnrecoverableKeyException e) {
             e.printStackTrace();
+            mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
+            return;
         } catch (KeyStoreException e) {
             e.printStackTrace();
+            mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
+            return;
         }
         SocketFactory sf = context.getSocketFactory();
         try {
@@ -128,7 +132,9 @@ public class SecureConnect extends Thread {
 
     public void closeSocket() {
         try {
-            socket.close();
+            if (socket != null) {
+                socket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

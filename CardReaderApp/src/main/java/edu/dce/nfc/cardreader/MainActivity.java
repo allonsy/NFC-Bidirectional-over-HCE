@@ -46,8 +46,8 @@ public class MainActivity extends ReaderActivity {
         try {
             String command, result, successString;
 
-//            command = "CHECKIN";
-//            successString = ReturnStrings.SUCCESS_CHECK_IN;
+            command = "CHECKIN";
+            successString = ReturnStrings.SUCCESS_CHECK_IN;
 
 //            command = "OPENDOOR";
 //            successString = ReturnStrings.SUCCESS_OPEN_ROOM;
@@ -55,8 +55,8 @@ public class MainActivity extends ReaderActivity {
 //            command = "ROOMCHARGE";
 //            successString = ReturnStrings.SUCCESS_ROOM_CHARGE;
 
-            command = "CHECKOUT";
-            successString = ReturnStrings.SUCCESS_CHECKOUT;
+//            command = "CHECKOUT";
+//            successString = ReturnStrings.SUCCESS_CHECKOUT;
 
 
             result = transactNfc(isoDep, command);
@@ -64,6 +64,7 @@ public class MainActivity extends ReaderActivity {
                 handleSuccess(command);
                 System.out.println("Successful " + command);
             } else {
+                System.out.println("Errored");
                 handleError(result);
             }
             System.out.println("result is: " + result);
@@ -114,39 +115,52 @@ public class MainActivity extends ReaderActivity {
     }
 
     private void handleError(String error) {
-        this.findViewById(android.R.id.content).setBackgroundColor(Color.RED);
-        final TextView t = new TextView(this);
-        t.setGravity(Gravity.CENTER);
-        t.setText(error);
-        t.setTextColor(Color.WHITE);
-        t.setTextSize(35);
-        mLayout.addView(t);
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        final String finalErr = error;
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
-                mLayout.removeView(t);
+                MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.RED);
+                final TextView t = new TextView(MainActivity.this);
+                t.setGravity(Gravity.CENTER);
+                t.setText(finalErr);
+                t.setTextColor(Color.WHITE);
+                t.setTextSize(35);
+                mLayout.addView(t);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
+                        mLayout.removeView(t);
+                    }
+                }, 2000);
+
             }
-        }, 2000);
+        });
     }
 
     private void handleSuccess(String command) {
-        this.findViewById(android.R.id.content).setBackgroundColor(Color.GREEN);
-        final TextView t = new TextView(this);
-        t.setGravity(Gravity.CENTER);
-        t.setText("SUCCESSFUL " + command);
-        t.setTextColor(Color.BLACK);
-        t.setTextSize(35);
-        mLayout.addView(t);
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        final String finalCmd = command;
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
-                mLayout.removeView(t);
-            }
-        }, 2000);
+                MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.GREEN);
+                final TextView t = new TextView(MainActivity.this);
+                t.setGravity(Gravity.CENTER);
+                t.setText("SUCCESSFUL " + finalCmd);
+                t.setTextColor(Color.BLACK);
+                t.setTextSize(35);
+                mLayout.addView(t);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
+                        mLayout.removeView(t);
+                    }
+                }, 2000);
 
+            }
+        });
     }
 }
