@@ -1,10 +1,16 @@
 package edu.dce.nfc.cardreader;
 
+import android.graphics.Color;
 import android.nfc.tech.IsoDep;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.os.Handler;
 
 import java.io.IOException;
 
@@ -17,6 +23,7 @@ public class MainActivity extends ReaderActivity {
     public static int mMaxTransceiveLength;
     public static boolean mExtendedApduSupported;
     public static int mTimeout;
+    LinearLayout mLayout;
 
 
     @Override
@@ -37,34 +44,25 @@ public class MainActivity extends ReaderActivity {
                 "  Timeout = " + mTimeout);
 
         try {
-/*            String result = transactNfc(isoDep, "CHECKIN");
-            if (result.equals(ReturnStrings.SUCCESS_CHECK_IN)) {
-                //TODO: display green
-                System.out.println("Successful checkin");
-            } else {
-                handleError(result);
-            }
-*/
-/*            String result = transactNfc(isoDep, "OPENDOOR");
-            if (result.equals(ReturnStrings.SUCCESS_OPEN_ROOM)) {
-                //TODO: display green
-                System.out.println("Successful open door");
-            } else {
-                handleError(result);
-            }
-*/
-/*            String result = transactNfc(isoDep, "ROOMCHARGE");
-            if (result.equals(ReturnStrings.SUCCESS_ROOM_CHARGE)) {
-                //TODO: display green
-                System.out.println("Successful room charge");
-            } else {
-                handleError(result);
-            }
-*/
-            String result = transactNfc(isoDep, "CHECKOUT");
-            if (result.equals(ReturnStrings.SUCCESS_CHECKOUT)) {
-                //TODO: display green
-                System.out.println("Successful check out");
+            String command, result, successString;
+
+//            command = "CHECKIN";
+//            successString = ReturnStrings.SUCCESS_CHECK_IN;
+
+//            command = "OPENDOOR";
+//            successString = ReturnStrings.SUCCESS_OPEN_ROOM;
+
+//            command = "ROOMCHARGE";
+//            successString = ReturnStrings.SUCCESS_ROOM_CHARGE;
+
+            command = "CHECKOUT";
+            successString = ReturnStrings.SUCCESS_CHECKOUT;
+
+
+            result = transactNfc(isoDep, command);
+            if (result.equals(successString)) {
+                handleSuccess(command);
+                System.out.println("Successful " + command);
             } else {
                 handleError(result);
             }
@@ -80,6 +78,7 @@ public class MainActivity extends ReaderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mLayout = (LinearLayout)findViewById(R.id.text_view_container);
     }
 
     @Override
@@ -115,7 +114,39 @@ public class MainActivity extends ReaderActivity {
     }
 
     private void handleError(String error) {
-        //TODO: turn screen red
-        System.out.println("ERROR: " + error);
+        this.findViewById(android.R.id.content).setBackgroundColor(Color.RED);
+        final TextView t = new TextView(this);
+        t.setGravity(Gravity.CENTER);
+        t.setText(error);
+        t.setTextColor(Color.WHITE);
+        t.setTextSize(35);
+        mLayout.addView(t);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
+                mLayout.removeView(t);
+            }
+        }, 2000);
+    }
+
+    private void handleSuccess(String command) {
+        this.findViewById(android.R.id.content).setBackgroundColor(Color.GREEN);
+        final TextView t = new TextView(this);
+        t.setGravity(Gravity.CENTER);
+        t.setText("SUCCESSFUL " + command);
+        t.setTextColor(Color.BLACK);
+        t.setTextSize(35);
+        mLayout.addView(t);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
+                mLayout.removeView(t);
+            }
+        }, 2000);
+
     }
 }
