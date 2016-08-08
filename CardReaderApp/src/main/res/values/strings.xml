@@ -3,6 +3,10 @@
 
     <string name="app_name">Dentify_Receiver</string>
     <string name="title_string">Receiver Emulator</string>
-    <string name="action_settings">Settings</string>
+    <string name="check_in">Check In</string>
+    <string name="open_door">Open Door</string>
+    <string name="room_charge">Room Charge</string>
+    <string name="check_out">Check Out</string>
+
 
 </resources>

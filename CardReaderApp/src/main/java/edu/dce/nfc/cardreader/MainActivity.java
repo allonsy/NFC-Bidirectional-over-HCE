@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.os.Handler;
@@ -23,6 +24,8 @@ public class MainActivity extends ReaderActivity {
     public static int mMaxTransceiveLength;
     public static boolean mExtendedApduSupported;
     public static int mTimeout;
+    public ReceiverState mReceiverState;
+    private EditText mTextView;
     LinearLayout mLayout;
 
 
@@ -45,18 +48,28 @@ public class MainActivity extends ReaderActivity {
 
         try {
             String command, result, successString;
-
-            command = "CHECKIN";
-            successString = ReturnStrings.SUCCESS_CHECK_IN;
-
-//            command = "OPENDOOR";
-//            successString = ReturnStrings.SUCCESS_OPEN_ROOM;
-
-//            command = "ROOMCHARGE";
-//            successString = ReturnStrings.SUCCESS_ROOM_CHARGE;
-
-//            command = "CHECKOUT";
-//            successString = ReturnStrings.SUCCESS_CHECKOUT;
+            if (mReceiverState == ReceiverState.OPENDOOR) {
+                System.out.println("SENDING OPENDOOR SETTINGS");
+                command = "OPENDOOR";
+                successString = ReturnStrings.SUCCESS_OPEN_ROOM;
+            }
+            else if (mReceiverState == ReceiverState.ROOMCHARGE) {
+                System.out.println("SENDING ROOMCHARGE SETTINGS");
+                command = "ROOMCHARGE";
+                String amount = mTextView.getText().toString();
+                command = command + amount;
+                successString = ReturnStrings.SUCCESS_ROOM_CHARGE;
+            }
+            else if (mReceiverState == ReceiverState.CHECKOUT) {
+                System.out.println("SENDING CHECKOUT SETTINGS");
+                command = "CHECKOUT";
+                successString = ReturnStrings.SUCCESS_CHECKOUT;
+            }
+            else {
+                System.out.println("going default");
+                command = "CHECKIN";
+                successString = ReturnStrings.SUCCESS_CHECK_IN;
+            }
 
 
             result = transactNfc(isoDep, command);
@@ -80,6 +93,8 @@ public class MainActivity extends ReaderActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLayout = (LinearLayout)findViewById(R.id.text_view_container);
+        mTextView = (EditText) findViewById(R.id.amountText);
+        mTextView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -108,8 +123,21 @@ public class MainActivity extends ReaderActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.check_in) {
+            mReceiverState = ReceiverState.CHECKIN;
+            mTextView.setVisibility(View.INVISIBLE);
+        }
+        else if (id == R.id.open_door) {
+            mReceiverState = ReceiverState.OPENDOOR;
+            mTextView.setVisibility(View.INVISIBLE);
+        }
+        else if (id == R.id.room_charge) {
+            mReceiverState = ReceiverState.ROOMCHARGE;
+            mTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mReceiverState = ReceiverState.CHECKOUT;
+            mTextView.setVisibility(View.INVISIBLE);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -119,6 +147,7 @@ public class MainActivity extends ReaderActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mTextView.setVisibility(View.INVISIBLE);
                 MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.RED);
                 final TextView t = new TextView(MainActivity.this);
                 t.setGravity(Gravity.CENTER);
@@ -132,6 +161,9 @@ public class MainActivity extends ReaderActivity {
                     public void run() {
                         MainActivity.this.findViewById(android.R.id.content).setBackgroundColor(Color.WHITE);
                         mLayout.removeView(t);
+                        if (mReceiverState == ReceiverState.ROOMCHARGE) {
+                            mTextView.setVisibility(View.VISIBLE);
+                        }
                     }
                 }, 2000);
 
@@ -162,5 +194,12 @@ public class MainActivity extends ReaderActivity {
 
             }
         });
+    }
+
+    public enum ReceiverState {
+        CHECKIN,
+        OPENDOOR,
+        ROOMCHARGE,
+        CHECKOUT
     }
 }

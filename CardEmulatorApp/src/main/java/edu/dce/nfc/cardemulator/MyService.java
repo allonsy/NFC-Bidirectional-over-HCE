@@ -23,6 +23,10 @@ public class MyService extends EmulatorService {
         String actualCommand = command;
         Log.i(TAG, "actual command = " + actualCommand);
         String result, jsonString;
+        int commandLength = 10;
+        if (actualCommand.length()<10) {
+            commandLength = actualCommand.length();
+        }
         try {
             if (actualCommand.equals("CHECKIN")) {
                 jsonString = "{\"command\": \"CHECKIN\"}";
@@ -48,7 +52,7 @@ public class MyService extends EmulatorService {
                 if (room == -1 || floor == -1) {
                     return ReturnStrings.ERROR_NO_ROOM;
                 }
-                jsonString = "{\"command\": \"OPENDOOR\", \"floor\":" + floor + "\"room\":" + room + "}";
+                jsonString = "{\"command\": \"OPENDOOR\", \"floor\":" + floor + ",\"room\":" + room + "}";
                 result = initializeConnection(Utils.SERVER_IP_ADDRESS, Utils.SERVER_PORT, getResources().openRawResource(R.raw.client), jsonString);
                 System.out.println("SecureConnect returned a val of " + result);
                 if (result.equals(ReturnStrings.ERROR_SECURE_CONNECT)) {
@@ -59,10 +63,13 @@ public class MyService extends EmulatorService {
                     return ReturnStrings.SUCCESS_OPEN_ROOM;
                 }
                 return getJSONError(jsonObject);
-            } else if (actualCommand.equals("ROOMCHARGE")) {
+            } else if (actualCommand.substring(0, commandLength).equals("ROOMCHARGE")) {
                 SharedPreferences settings = getSharedPreferences("My_Prefs", 0);
-                int amount = settings.getInt("AMOUNT", -1);
-                if (amount == -1) {
+                int amount = 0;
+                try {
+                    amount = Integer.parseInt(actualCommand.substring(10));
+                }
+                catch(NumberFormatException e) {
                     return ReturnStrings.ERROR_INVALID_AMOUNT;
                 }
                 jsonString = "{\"command\": \"ROOMCHARGE\", \"amount\": " + amount + "}";

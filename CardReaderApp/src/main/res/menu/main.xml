@@ -2,8 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/check_in"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings" />
+        android:title="@string/check_in" />
+    <item
+        android:id="@+id/open_door"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/open_door" />
+    <item
+        android:id="@+id/room_charge"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/room_charge" />
+    <item
+        android:id="@+id/check_out"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/check_out" />
 </menu>

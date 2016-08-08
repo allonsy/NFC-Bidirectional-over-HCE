@@ -10,36 +10,19 @@
     tools:context=".MainActivity"
     >
 
-    <GridLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:rowCount="2"
-        android:columnCount="2"
-        android:layout_alignParentEnd="false">
+        android:id="@+id/text_view_container">
 
-        <Button
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Check-in"
-            android:id="@+id/button" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Open Door"
-            android:id="@+id/button2" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Room Charge"
-            android:id="@+id/button3" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Check Out"
-            android:id="@+id/button4" />
-    </GridLayout>
+            android:id="@+id/amountText"
+            android:layout_gravity="center_horizontal"
+            android:hint="amount"
+            android:inputType="number|numberDecimal" />
+    </LinearLayout>
 
 </RelativeLayout>
