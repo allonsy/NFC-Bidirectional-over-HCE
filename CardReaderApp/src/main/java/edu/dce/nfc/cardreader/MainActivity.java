@@ -73,8 +73,16 @@ public class MainActivity extends ReaderActivity {
 
 
             result = transactNfc(isoDep, command);
-            if (result.equals(successString)) {
-                handleSuccess(command);
+            if (result.startsWith(successString)) {
+                if (successString.equals(ReturnStrings.SUCCESS_ROOM_CHARGE)) {
+                    handleSuccess(result);
+                }
+                else if (successString.equals(ReturnStrings.SUCCESS_CHECKOUT)){
+                    handleSuccess(result);
+                }
+                else {
+                    handleSuccess(command);
+                }
                 System.out.println("Successful " + command);
             } else {
                 System.out.println("Errored");

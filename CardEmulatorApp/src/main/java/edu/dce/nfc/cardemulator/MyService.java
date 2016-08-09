@@ -65,9 +65,9 @@ public class MyService extends EmulatorService {
                 return getJSONError(jsonObject);
             } else if (actualCommand.substring(0, commandLength).equals("ROOMCHARGE")) {
                 SharedPreferences settings = getSharedPreferences("My_Prefs", 0);
-                int amount = 0;
+                double amount = 0;
                 try {
-                    amount = Integer.parseInt(actualCommand.substring(10));
+                    amount = Double.parseDouble(actualCommand.substring(10));
                 }
                 catch(NumberFormatException e) {
                     return ReturnStrings.ERROR_INVALID_AMOUNT;
@@ -78,22 +78,28 @@ public class MyService extends EmulatorService {
                 if (result.equals(ReturnStrings.ERROR_SECURE_CONNECT)) {
                     return ReturnStrings.ERROR_SECURE_CONNECT;
                 }
-                JSONObject jsonObject = new JSONObject(result);
-                if (parseJSON(jsonObject)) {
-                    return ReturnStrings.SUCCESS_ROOM_CHARGE;
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(result);
+                    return ReturnStrings.SUCCESS_ROOM_CHARGE + " " + jsonObject.getDouble("amount");
                 }
-                return getJSONError(jsonObject);
+                catch (JSONException e) {
+                    return e.toString();
+                }
             } else if (actualCommand.equals("CHECKOUT")) {
                 jsonString = "{\"command\": \"CHECKOUT\"}";
                 result = initializeConnection(Utils.SERVER_IP_ADDRESS, Utils.SERVER_PORT, getResources().openRawResource(R.raw.client), jsonString);
                 if (result.equals((ReturnStrings.ERROR_SECURE_CONNECT))) {
                     return ReturnStrings.ERROR_SECURE_CONNECT;
                 }
-                JSONObject jsonObject = new JSONObject(result);
-                if (parseJSON(jsonObject)) {
-                    return ReturnStrings.SUCCESS_CHECKOUT;
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(result);
+                    return ReturnStrings.SUCCESS_CHECKOUT + " " + jsonObject.getDouble("amount");
                 }
-                return getJSONError(jsonObject);
+                catch (JSONException e) {
+                    return e.toString();
+                }
             } else {
                 System.out.println("got unknown command");
                 return ReturnStrings.ERROR_UNKNOWN_COMMAND;

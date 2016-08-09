@@ -68,6 +68,7 @@ public class SecureConnect extends Thread {
             kmf.init(keyStore, new char[]{});
             KeyManager[] keys = kmf.getKeyManagers();
             context.init(keys, trustChain, null);
+            System.out.println(context.getDefaultSSLParameters());
         } catch (KeyManagementException e) {
             System.out.println("key management error: " + e);
             mSuccess = ReturnStrings.ERROR_SECURE_CONNECT;
